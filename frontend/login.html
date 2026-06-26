@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link rel="stylesheet" href="/frontend/css/login.css" />
+  </head>
+  <body>
+    <div class="card-login">
+      <h1 class="card-title">EduFocu</h1>
+      <form action="/login" method="post">
+        <label class="usuario-input" for="username">Usuário:</label>
+        <input type="text" id="username" name="username" class="usuario-input" required /><br /><br />
+        <label class="usuario-input" for="password">Senha:</label>
+        <input type="password" id="password" name="password" class="usuario-input" required /><br /><br />
+        <input class="btn-entrar" type="submit" value="Entrar" />
+      </form>
+    </div>
+  </body>
+</html>

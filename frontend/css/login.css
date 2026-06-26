@@ -1,0 +1,50 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #ffffff;
+  color: #ffffff;
+}
+.card-login {
+  background color: rgba(18, 18, 42, 0.8)
+  border-radius: 16px;
+  backdrop-filter: blur(5px);
+  border: 1px solid var(--vidro);
+  overflow: hidden;
+  transition: all 0.5s ease;
+  cursor: pointer;
+}
+
+.card-title {
+  color: #6c3fc5;
+}
+
+label {
+  color: #c9b8f0;
+}
+
+input[type='text'],
+input[type='password'] {
+  background-color: #12122a;
+  border: 1px solid #6c3fc5;
+  color: #ffffff;
+}
+
+input[type='text']:focus,
+input[type='password']:focus {
+  outline: 2px solid #8b5cf6;
+}
+
+.btn-entrar {
+  background-color: #6c3fc5;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-entrar:hover {
+  background-color: #8b5cf6;
+}
