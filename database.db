@@ -1,0 +1,20 @@
+import sqlite3
+
+# Conecta ao banco de dados (se o arquivo não existir, ele cria automaticamente)
+conexao = sqlite3.connect("edufoco.db")
+cursor = conexao.cursor()
+
+# Cria a tabela de alunos
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS alunos (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL,
+    matricula TEXT UNIQUE NOT NULL,
+    foto_path TEXT
+)
+""")
+
+conexao.commit()
+conexao.close()
+
+print("Banco de dados 'edufoco.db' e tabela 'alunos' criados com sucesso!")
