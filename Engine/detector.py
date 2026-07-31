@@ -9,16 +9,7 @@ import time
 import sqlite3
 import face_recognition
 
-model_path = "/home/virusexe/EDU-TCC/EduFocu/Engine/face_landmarker.task"
-
-if not os.path.exists(model_path):
-    url = "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task"
-    print("Baixando modelo...")
-    urllib.request.urlretrieve(url, model_path)
-
-# =========================================================================
-# FUNÇÃO PARA CARREGAR OS ALUNOS DO BANCO DE DADOS
-# =========================================================================
+model_path = "/home/3tec/TCC TEC/TCC_CAM/Engine/face_landmarker.task"
 
 
 def carregar_alunos_cadastrados():
@@ -125,9 +116,6 @@ with vision.FaceLandmarker.create_from_options(options) as landmarker:
                 y_min, y_max = max(0, min(lista_y) -
                                    25), min(h, max(lista_y) + 15)
 
-                # =========================================================================
-                # LÓGICA DE RECONHECIMENTO EM TEMPO REAL
-                # =========================================================================
                 nome_identificado = "Desconhecido"
 
                 if encodings_db:

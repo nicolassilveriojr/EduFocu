@@ -1,0 +1,11 @@
+[33m9c65b79[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{0}: reset: moving to HEAD~1
+[33mab039f6[m HEAD@{1}: reset: moving to HEAD~1
+[33m5bd112f[m HEAD@{2}: reset: moving to HEAD~1
+[33m584cfa4[m HEAD@{3}: reset: moving to HEAD~1
+[33mb71348c[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{4}: commit: feat: organizando o scanner
+[33m584cfa4[m HEAD@{5}: commit: feat: organizando o login
+[33m5bd112f[m HEAD@{6}: pull: Fast-forward
+[33mab039f6[m HEAD@{7}: commit: test: fazendo teste da detectação de rosto
+[33m9c65b79[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{8}: Branch: renamed refs/heads/main to refs/heads/main
+[33m9c65b79[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{10}: commit: Criando Estrutura de Pastas
+[33m206763c[m HEAD@{11}: clone: from https://github.com/nicolassilveriojr/TCC_CAM.git
