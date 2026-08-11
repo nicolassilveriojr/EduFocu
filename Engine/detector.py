@@ -2,7 +2,6 @@ import cv2
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 import mediapipe as mp
-import urllib.request
 import os
 import math
 import time
@@ -16,7 +15,6 @@ def carregar_alunos_cadastrados():
     print("Carregando alunos do banco de dados...")
     conexao = sqlite3.connect("edufoco.db")
     cursor = conexao.cursor()
-
     try:
         cursor.execute("SELECT nome, foto_path FROM alunos")
         linhas = cursor.fetchall()
@@ -27,7 +25,6 @@ def carregar_alunos_cadastrados():
 
     nomes_conhecidos = []
     encodings_conhecidos = []
-
     for nome, foto_path in linhas:
         if os.path.exists(foto_path):
             imagem = face_recognition.load_image_file(foto_path)
@@ -39,7 +36,6 @@ def carregar_alunos_cadastrados():
         else:
             print(
                 f"Aviso: Foto não encontrada para {nome} no caminho: {foto_path}")
-
     conexao.close()
     return nomes_conhecidos, encodings_conhecidos
 
@@ -49,7 +45,8 @@ nomes_db, encodings_db = carregar_alunos_cadastrados()
 base_options = python.BaseOptions(model_asset_path=model_path)
 MAX_ROSTOS = 4
 options = vision.FaceLandmarkerOptions(
-    base_options=base_options, num_faces=MAX_ROSTOS)
+    base_options=base_options,
+    num_faces=MAX_ROSTOS)
 
 cap = cv2.VideoCapture(0)
 if not cap.isOpened():
@@ -61,6 +58,8 @@ cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
 tempo_sem_rosto = 0
 tempo_cabeca_inclinada = [0.0] * MAX_ROSTOS
+cache_nomes = {}
+contador_frames = 0
 ultimo_frame = time.time()
 
 
@@ -84,6 +83,7 @@ with vision.FaceLandmarker.create_from_options(options) as landmarker:
         agora = time.time()
         delta = agora - ultimo_frame
         ultimo_frame = agora
+        contador_frames += 1
 
         rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb)
@@ -94,6 +94,8 @@ with vision.FaceLandmarker.create_from_options(options) as landmarker:
         if not results.face_landmarks:
             tempo_sem_rosto += delta
             tempo_cabeca_inclinada = [0.0] * MAX_ROSTOS
+            cache_nomes.clear()
+
             if tempo_sem_rosto >= 2:
                 cv2.putText(frame, "Status: AMBIENTE VAZIO", (10, 28),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
@@ -102,8 +104,9 @@ with vision.FaceLandmarker.create_from_options(options) as landmarker:
                             cv2.FONT_HERSHEY_SIMPLEX, 0.7, (200, 200, 200), 2)
         else:
             tempo_sem_rosto = 0
-            cv2.putText(frame, f"EduFoco - Monitorando {len(results.face_landmarks)} aluno(s)", (
-                10, 28), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 2)
+            qtd_rostos = min(len(results.face_landmarks), MAX_ROSTOS)
+            cv2.putText(frame, f"EduFoco - Monitorando {qtd_rostos} aluno(s)",
+                        (10, 28), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 2)
 
             for idx, landmarks in enumerate(results.face_landmarks):
                 if idx >= MAX_ROSTOS:
@@ -116,19 +119,21 @@ with vision.FaceLandmarker.create_from_options(options) as landmarker:
                 y_min, y_max = max(0, min(lista_y) -
                                    25), min(h, max(lista_y) + 15)
 
-                nome_identificado = "Desconhecido"
-
-                if encodings_db:
-                    localizacao_rosto = [(y_min, x_max, y_max, x_min)]
-                    encoding_atual = face_recognition.face_encodings(
-                        rgb, localizacao_rosto)
-
-                    if encoding_atual:
-                        id_compara = face_recognition.compare_faces(
-                            encodings_db, encoding_atual[0], tolerance=0.6)
-                        if True in id_compara:
-                            primeiro_match = id_compara.index(True)
-                            nome_identificado = nomes_db[primeiro_match]
+                if contador_frames % 5 == 0 or idx not in cache_nomes:
+                    nome_identificado = "Desconhecido"
+                    if encodings_db:
+                        localizacao_rosto = [(y_min, x_max, y_max, x_min)]
+                        encoding_atual = face_recognition.face_encodings(
+                            rgb, localizacao_rosto)
+                        if encoding_atual:
+                            id_compara = face_recognition.compare_faces(
+                                encodings_db, encoding_atual[0], tolerance=0.6)
+                            if True in id_compara:
+                                primeiro_match = id_compara.index(True)
+                                nome_identificado = nomes_db[primeiro_match]
+                    cache_nomes[idx] = nome_identificado
+                else:
+                    nome_identificado = cache_nomes.get(idx, "Desconhecido")
 
                 angulo, pt_topo, pt_queixo = calcular_inclinacao(
                     landmarks, w, h)
@@ -140,7 +145,6 @@ with vision.FaceLandmarker.create_from_options(options) as landmarker:
 
                 status = "ATENTO"
                 cor_scanner = (0, 255, 0)
-
                 if tempo_cabeca_inclinada[idx] >= 2:
                     status = "DESATENTO"
                     cor_scanner = (0, 165, 255)
@@ -149,14 +153,12 @@ with vision.FaceLandmarker.create_from_options(options) as landmarker:
                               (x_max, y_max), cor_scanner, 2)
                 cv2.rectangle(frame, (x_min, y_min - 35),
                               (x_max, y_min), cor_scanner, -1)
-
                 cv2.putText(frame, f"{nome_identificado} - {status}", (x_min + 5, y_min - 12),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1, cv2.LINE_AA)
                 cv2.putText(frame, f"Ang: {angulo:.1f} | Temp: {tempo_cabeca_inclinada[idx]:.1f}s", (
                     x_min + 5, y_max + 15), cv2.FONT_HERSHEY_SIMPLEX, 0.4, cor_scanner, 1, cv2.LINE_AA)
 
         cv2.imshow("EduFoco - Monitoramento", frame)
-
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 

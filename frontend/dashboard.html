@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard Escolar</title>
+    <link rel="stylesheet" href="./css/dashboard.css" />
+  </head>
+  <body>
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">
+      ☰
+    </button>
+
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h3>Menu Acadêmico</h3>
+      </div>
+
+      <div class="student-list">
+        <div class="student-item">
+          <img
+            src="aonde via ficar a foto"
+            alt="Foto de uma menina "
+            class="student-photo"
+          />
+          <div class="student-info">
+            <span class="student-name">Ana Silva</span>
+            <span class="student-cgm">CGM: 482910-5</span>
+          </div>
+        </div>
+
+        <div class="student-item">
+          <img
+            src="https://unsplash.com"
+            alt="Foto de Bruno Costa"
+            class="student-photo"
+          />
+          <div class="student-info">
+            <span class="student-name">Bruno Costa</span>
+            <span class="student-cgm">CGM: 193048-2</span>
+          </div>
+        </div>
+
+        <div class="student-item">
+          <div class="student-photo placeholder-photo">M</div>
+          <div class="student-info">
+            <span class="student-name">Mariana Souza</span>
+            <span class="student-cgm">CGM: 748291-0</span>
+          </div>
+        </div>
+
+        <div class="student-item">
+          <img
+            src="https://unsplash.com"
+            alt="Foto de Lucas Lima"
+            class="student-photo"
+          />
+          <div class="student-info">
+            <span class="student-name">Lucas Lima</span>
+            <span class="student-cgm">CGM: 351940-7</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <main class="main-content">
+      <header class="content-header">
+        <h1>Visão Geral do Painel</h1>
+      </header>
+      <section class="dashboard-grid">
+        <div class="card">Conteúdo Principal 1</div>
+        <div class="card">Conteúdo Principal 2</div>
+      </section>
+    </main>
+
+    <script src="./js/dashboard.js"></script>
+  </body>
+</html>
