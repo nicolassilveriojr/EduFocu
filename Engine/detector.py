@@ -8,7 +8,7 @@ import time
 import sqlite3
 import face_recognition
 
-model_path = "/home/3tec/TCC TEC/TCC_CAM/Engine/face_landmarker.task"
+model_path = "face_landmarker.task"
 
 
 def carregar_alunos_cadastrados():
