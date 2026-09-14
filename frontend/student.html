@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EduFoco IA - Alunos</title>
+    <link rel="stylesheet" href="./css/dashboard.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <style>
+      .student-profile {
+        background: #ffffff;
+        border-radius: var(--radius);
+        border: 1px solid var(--gray-200);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+      .profile-header {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        padding: 2rem;
+        border-bottom: 1px solid var(--gray-200);
+        background: linear-gradient(135deg, #dbeafe 0%, #ede9fe 100%);
+      }
+      .profile-photo {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary), #7c3aed);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.75rem;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+      .profile-info h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--gray-900);
+      }
+      .profile-meta {
+        display: flex;
+        gap: 1.5rem;
+        margin-top: 0.5rem;
+      }
+      .profile-meta span {
+        font-size: 0.8125rem;
+        color: var(--gray-600);
+      }
+      .profile-body {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.25rem;
+        padding: 1.5rem 2rem;
+      }
+      .stat-card {
+        text-align: center;
+        padding: 1.25rem;
+        background: var(--gray-50);
+        border-radius: 8px;
+        border: 1px solid var(--gray-200);
+      }
+      .stat-card .stat-value {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--gray-900);
+      }
+      .stat-card .stat-label {
+        font-size: 0.75rem;
+        color: var(--gray-500);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-top: 0.25rem;
+      }
+      .student-list-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 1rem;
+        padding: 1.5rem;
+      }
+      .student-card {
+        background: #ffffff;
+        border-radius: var(--radius);
+        border: 1px solid var(--gray-200);
+        box-shadow: var(--shadow);
+        padding: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .student-card:hover {
+        box-shadow: var(--shadow-md);
+        transform: translateY(-1px);
+        border-color: var(--primary);
+      }
+      .student-card-photo {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary), #7c3aed);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 0.875rem;
+        flex-shrink: 0;
+      }
+      .student-card-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .student-card-name {
+        font-size: 0.9375rem;
+        font-weight: 600;
+        color: var(--gray-900);
+      }
+      .student-card-meta {
+        font-size: 0.75rem;
+        color: var(--gray-500);
+        margin-top: 0.125rem;
+      }
+      .student-card-stats {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 0.5rem;
+      }
+      .mini-stat {
+        font-size: 0.6875rem;
+        color: var(--gray-600);
+      }
+      .mini-stat strong {
+        color: var(--gray-800);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-icon">EF</div>
+        <span class="brand-text">EduFoco IA</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="./dashboard.html" class="nav-link">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="./student.html" class="nav-link active">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span>Alunos</span>
+        </a>
+        <a href="./highlights.html" class="nav-link">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <span>Destaques</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <div class="user-avatar">PR</div>
+          <div class="user-details">
+            <span class="user-name">Professor</span>
+            <span class="user-role">Administrador</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <main class="main-content" id="mainContent">
+      <header class="topbar">
+        <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div class="topbar-left">
+          <h1 class="page-title">Alunos</h1>
+          <span class="page-subtitle">Cadastro e acompanhamento individual</span>
+        </div>
+        <div class="topbar-right">
+          <div class="search-box">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" placeholder="Buscar aluno..." id="searchInput" />
+          </div>
+        </div>
+      </header>
+
+      <div class="dashboard-content" id="studentContent">
+        <div class="student-list-grid" id="studentGrid"></div>
+        <div class="student-profile" id="studentProfile" style="display:none;"></div>
+      </div>
+    </main>
+
+    <script>
+      const DEMO = [
+        { id: 1, nome: "Ana Silva", matricula: "482910-5", sala: "Sala 101", turno: "Manhã", ocorrencias: 3, tempo_desatencao: 45, indice_atencao: 85 },
+        { id: 2, nome: "Bruno Costa", matricula: "193048-2", sala: "Sala 101", turno: "Manhã", ocorrencias: 7, tempo_desatencao: 120, indice_atencao: 65 },
+        { id: 3, nome: "Mariana Souza", matricula: "748291-0", sala: "Sala 102", turno: "Manhã", ocorrencias: 1, tempo_desatencao: 15, indice_atencao: 95 },
+        { id: 4, nome: "Lucas Lima", matricula: "351940-7", sala: "Sala 102", turno: "Tarde", ocorrencias: 5, tempo_desatencao: 90, indice_atencao: 75 },
+        { id: 5, nome: "Carlos Mendes", matricula: "502837-1", sala: "Sala 101", turno: "Tarde", ocorrencias: 10, tempo_desatencao: 200, indice_atencao: 50 },
+        { id: 6, nome: "Fernanda Rocha", matricula: "619043-8", sala: "Sala 103", turno: "Manhã", ocorrencias: 2, tempo_desatencao: 30, indice_atencao: 90 },
+        { id: 7, nome: "Gabriel Santos", matricula: "384729-6", sala: "Sala 103", turno: "Tarde", ocorrencias: 8, tempo_desatencao: 150, indice_atencao: 60 },
+        { id: 8, nome: "Helena Oliveira", matricula: "726150-3", sala: "Sala 102", turno: "Manhã", ocorrencias: 0, tempo_desatencao: 0, indice_atencao: 100 },
+        { id: 9, nome: "Igor Almeida", matricula: "158493-2", sala: "Sala 101", turno: "Manhã", ocorrencias: 4, tempo_desatencao: 60, indice_atencao: 80 },
+        { id: 10, nome: "Julia Ferreira", matricula: "903267-5", sala: "Sala 103", turno: "Tarde", ocorrencias: 6, tempo_desatencao: 110, indice_atencao: 70 },
+        { id: 11, nome: "Kevin Ribeiro", matricula: "417382-9", sala: "Sala 102", turno: "Tarde", ocorrencias: 12, tempo_desatencao: 240, indice_atencao: 40 },
+        { id: 12, nome: "Larissa Pereira", matricula: "830514-7", sala: "Sala 101", turno: "Tarde", ocorrencias: 1, tempo_desatencao: 10, indice_atencao: 95 },
+      ];
+
+      let alunos = [];
+
+      async function init() {
+        try {
+          const res = await fetch("/api/alunos");
+          if (res.ok) { alunos = await res.json(); }
+          else { alunos = DEMO; }
+        } catch { alunos = DEMO; }
+        renderStudentGrid();
+      }
+
+      function getInitials(n) { return n.split(" ").filter((_, i, a) => i === 0 || i === a.length - 1).map(w => w[0]).join("").toUpperCase(); }
+      function fmtTempo(s) { if (s < 60) return s + "s"; const m = Math.floor(s/60); return m < 60 ? `${m}m ${s%60}s` : `${Math.floor(m/60)}h ${m%60}m`; }
+      function badgeClass(i) { return i >= 80 ? "badge-green" : i >= 50 ? "badge-amber" : "badge-red"; }
+
+      function renderStudentGrid(filter = "") {
+        const grid = document.getElementById("studentGrid");
+        const profile = document.getElementById("studentProfile");
+        profile.style.display = "none";
+        grid.style.display = "grid";
+
+        let list = alunos;
+        if (filter) list = list.filter(a => a.nome.toLowerCase().includes(filter) || a.matricula.toLowerCase().includes(filter));
+
+        grid.innerHTML = list.map(a => `
+          <div class="student-card" onclick="showProfile(${a.id})">
+            <div class="student-card-photo">${getInitials(a.nome)}</div>
+            <div class="student-card-info">
+              <div class="student-card-name">${a.nome}</div>
+              <div class="student-card-meta">Mat: ${a.matricula} | ${a.sala || "--"} | ${a.turno || "--"}</div>
+              <div class="student-card-stats">
+                <span class="mini-stat">Ocorrências: <strong>${a.ocorrencias}</strong></span>
+                <span class="mini-stat">Índice: <strong><span class="badge ${badgeClass(a.indice_atencao)}" style="padding:1px 6px;font-size:0.625rem;">${a.indice_atencao}%</span></strong></span>
+              </div>
+            </div>
+          </div>
+        `).join("");
+      }
+
+      function showProfile(id) {
+        const a = alunos.find(s => s.id === id);
+        if (!a) return;
+
+        const grid = document.getElementById("studentGrid");
+        const profile = document.getElementById("studentProfile");
+        grid.style.display = "none";
+        profile.style.display = "block";
+
+        profile.innerHTML = `
+          <div class="profile-header">
+            <div class="profile-photo">${getInitials(a.nome)}</div>
+            <div class="profile-info">
+              <h2>${a.nome}</h2>
+              <div class="profile-meta">
+                <span>Matrícula: ${a.matricula}</span>
+                <span>Sala: ${a.sala || "--"}</span>
+                <span>Turno: ${a.turno || "--"}</span>
+              </div>
+            </div>
+          </div>
+          <div class="profile-body">
+            <div class="stat-card">
+              <div class="stat-value" style="color:${a.indice_atencao >= 80 ? 'var(--green)' : a.indice_atencao >= 50 ? 'var(--amber)' : 'var(--red)'}">${a.indice_atencao}%</div>
+              <div class="stat-label">Índice de Atenção</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">${a.ocorrencias}</div>
+              <div class="stat-label">Ocorrências</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">${fmtTempo(a.tempo_desatencao)}</div>
+              <div class="stat-label">Tempo de Desatenção</div>
+            </div>
+          </div>
+          <div style="padding: 0 2rem 2rem;">
+            <button class="btn-secondary" onclick="renderStudentGrid()" style="margin-top:1rem;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+              Voltar para lista
+            </button>
+          </div>
+        `;
+      }
+
+      // Sidebar
+      const menuToggle = document.getElementById("menuToggle");
+      const sidebar = document.getElementById("sidebar");
+      const overlay = document.getElementById("sidebarOverlay");
+      menuToggle.addEventListener("click", () => { sidebar.classList.toggle("active"); overlay.classList.toggle("active"); });
+      overlay.addEventListener("click", () => { sidebar.classList.remove("active"); overlay.classList.remove("active"); });
+
+      // Search
+      document.getElementById("searchInput").addEventListener("input", (e) => renderStudentGrid(e.target.value.toLowerCase().trim()));
+
+      init();
+    </script>
+  </body>
+</html>

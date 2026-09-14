@@ -3,76 +3,212 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard Escolar</title>
+    <title>EduFoco IA - Dashboard</title>
     <link rel="stylesheet" href="./css/dashboard.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
   </head>
   <body>
-    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">
-      ☰
-    </button>
-
+    <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
-      <div class="sidebar-header">
-        <h3>Menu Acadêmico</h3>
+      <div class="sidebar-brand">
+        <div class="brand-icon">EF</div>
+        <span class="brand-text">EduFoco IA</span>
       </div>
 
-      <div class="student-list">
-        <div class="student-item">
-          <img
-            src="aonde via ficar a foto"
-            alt="Foto de uma menina "
-            class="student-photo"
-          />
-          <div class="student-info">
-            <span class="student-name">Ana Silva</span>
-            <span class="student-cgm">CGM: 482910-5</span>
-          </div>
-        </div>
+      <nav class="sidebar-nav">
+        <a href="./dashboard.html" class="nav-link active">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="./student.html" class="nav-link">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span>Alunos</span>
+        </a>
+        <a href="./highlights.html" class="nav-link">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <span>Destaques</span>
+        </a>
+      </nav>
 
-        <div class="student-item">
-          <img
-            src="https://unsplash.com"
-            alt="Foto de Bruno Costa"
-            class="student-photo"
-          />
-          <div class="student-info">
-            <span class="student-name">Bruno Costa</span>
-            <span class="student-cgm">CGM: 193048-2</span>
-          </div>
-        </div>
-
-        <div class="student-item">
-          <div class="student-photo placeholder-photo">M</div>
-          <div class="student-info">
-            <span class="student-name">Mariana Souza</span>
-            <span class="student-cgm">CGM: 748291-0</span>
-          </div>
-        </div>
-
-        <div class="student-item">
-          <img
-            src="https://unsplash.com"
-            alt="Foto de Lucas Lima"
-            class="student-photo"
-          />
-          <div class="student-info">
-            <span class="student-name">Lucas Lima</span>
-            <span class="student-cgm">CGM: 351940-7</span>
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <div class="user-avatar">PR</div>
+          <div class="user-details">
+            <span class="user-name">Professor</span>
+            <span class="user-role">Administrador</span>
           </div>
         </div>
       </div>
     </aside>
 
+    <!-- Sidebar Overlay (mobile) -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <main class="main-content">
-      <header class="content-header">
-        <h1>Visão Geral do Painel</h1>
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+      <!-- Top Bar -->
+      <header class="topbar">
+        <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+
+        <div class="topbar-left">
+          <h1 class="page-title">Visão Geral</h1>
+          <span class="page-subtitle" id="currentDate"></span>
+        </div>
+
+        <div class="topbar-right">
+          <div class="search-box">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" placeholder="Buscar aluno..." id="searchInput" />
+          </div>
+          <button class="btn-icon notification-btn" id="notificationBtn" title="Notificações">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="notification-badge" id="notifBadge">0</span>
+          </button>
+        </div>
       </header>
-      <section class="dashboard-grid">
-        <div class="card">Conteúdo Principal 1</div>
-        <div class="card">Conteúdo Principal 2</div>
-      </section>
+
+      <!-- Dashboard Content -->
+      <div class="dashboard-content">
+        <!-- KPI Cards -->
+        <section class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-icon blue">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div class="kpi-info">
+              <span class="kpi-label">Total de Alunos</span>
+              <span class="kpi-value" id="totalAlunos">--</span>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-icon green">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <div class="kpi-info">
+              <span class="kpi-label">Índice Médio</span>
+              <span class="kpi-value" id="indiceMedio">--</span>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-icon amber">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <div class="kpi-info">
+              <span class="kpi-label">Total Ocorrências</span>
+              <span class="kpi-value" id="totalOcorrencias">--</span>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-icon red">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <div class="kpi-info">
+              <span class="kpi-label">Tempo Total Desatenção</span>
+              <span class="kpi-value" id="tempoDesatencao">--</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Charts Row -->
+        <section class="charts-row">
+          <div class="chart-card">
+            <div class="card-header">
+              <h3>Índice de Atenção por Aluno</h3>
+              <div class="card-actions">
+                <select id="filterSala" class="filter-select">
+                  <option value="">Todas as Salas</option>
+                </select>
+                <select id="filterTurno" class="filter-select">
+                  <option value="">Todos os Turnos</option>
+                </select>
+              </div>
+            </div>
+            <div class="chart-container">
+              <canvas id="attentionChart"></canvas>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <div class="card-header">
+              <h3>Distribuição de Atenção</h3>
+            </div>
+            <div class="chart-container chart-container-sm">
+              <canvas id="distributionChart"></canvas>
+            </div>
+            <div class="chart-legend" id="distributionLegend"></div>
+          </div>
+        </section>
+
+        <!-- Second Charts Row -->
+        <section class="charts-row">
+          <div class="chart-card">
+            <div class="card-header">
+              <h3>Top Alunos - Mais Ocorrências</h3>
+            </div>
+            <div class="chart-container">
+              <canvas id="ocorrenciasChart"></canvas>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <div class="card-header">
+              <h3>Alunos por Sala</h3>
+            </div>
+            <div class="chart-container">
+              <canvas id="salasChart"></canvas>
+            </div>
+          </div>
+        </section>
+
+        <!-- Students Table -->
+        <section class="table-section">
+          <div class="card-header">
+            <h3>Lista de Alunos</h3>
+            <div class="card-actions">
+              <button class="btn-secondary" id="exportBtn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Exportar CSV
+              </button>
+            </div>
+          </div>
+          <div class="table-wrapper">
+            <table class="data-table" id="alunosTable">
+              <thead>
+                <tr>
+                  <th data-sort="nome">Aluno ↕</th>
+                  <th data-sort="matricula">Matrícula ↕</th>
+                  <th data-sort="sala">Sala ↕</th>
+                  <th data-sort="turno">Turno ↕</th>
+                  <th data-sort="ocorrencias">Ocorrências ↕</th>
+                  <th data-sort="tempo_desatencao">Tempo Desatenção ↕</th>
+                  <th data-sort="indice_atencao">Índice ↕</th>
+                </tr>
+              </thead>
+              <tbody id="alunosBody">
+              </tbody>
+            </table>
+            <div class="table-empty" id="tableEmpty">
+              <p>Nenhum aluno encontrado.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Room Management -->
+        <section class="rooms-section">
+          <div class="card-header">
+            <h3>Gerenciamento de Salas</h3>
+          </div>
+          <div class="rooms-grid" id="roomsGrid">
+            <!-- Populated by JS -->
+          </div>
+        </section>
+
+      </div>
     </main>
 
     <script src="./js/dashboard.js"></script>

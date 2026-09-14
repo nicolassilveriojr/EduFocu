@@ -3,12 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Página de Login</title>
-    <link rel="stylesheet" href="/frontend/css/login.css" />
+    <title>EduFoco IA - Login</title>
+    <link rel="stylesheet" href="./css/login.css" />
   </head>
   <body>
     <div class="login-container">
-      <h2>Acessar Conta</h2>
+      <div class="login-brand">
+        <div class="login-logo">EF</div>
+        <h1>EduFoco IA</h1>
+        <p class="login-desc">Monitore a atenção dos alunos com Inteligência Artificial</p>
+      </div>
+
       <form id="loginForm">
         <div class="input-group">
           <label for="email">E-mail</label>
@@ -29,12 +34,16 @@
           <a href="#">Esqueceu a senha?</a>
         </div>
 
-        <button type="submit" class="btn-login" href="/frontend/dashboard.html">
+        <button type="submit" class="btn-login">
           Entrar
         </button>
         <p id="errorMessage" class="error-message"></p>
       </form>
+
+      <div class="login-footer">
+        <p>Desenvolvido por Adryan & Nicolas - TCC 2026</p>
+      </div>
     </div>
-    <script src="/frontend/js/login.js"></script>
+    <script src="./js/login.js"></script>
   </body>
 </html>

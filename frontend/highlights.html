@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EduFoco IA - Destaques</title>
+    <link rel="stylesheet" href="./css/dashboard.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <style>
+      .highlights-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+        gap: 1.25rem;
+      }
+      .highlight-card {
+        background: #ffffff;
+        border-radius: var(--radius);
+        border: 1px solid var(--gray-200);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        transition: all 0.2s;
+      }
+      .highlight-card:hover {
+        box-shadow: var(--shadow-md);
+        transform: translateY(-1px);
+      }
+      .highlight-card-header {
+        padding: 1.25rem 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .highlight-card-body {
+        padding: 0 1.5rem 1.25rem;
+      }
+      .highlight-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        flex-shrink: 0;
+      }
+      .highlight-title {
+        font-size: 0.9375rem;
+        font-weight: 600;
+        color: var(--gray-900);
+      }
+      .highlight-subtitle {
+        font-size: 0.75rem;
+        color: var(--gray-500);
+      }
+      .highlight-list {
+        list-style: none;
+      }
+      .highlight-list li {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.625rem 0;
+        border-bottom: 1px solid var(--gray-100);
+        font-size: 0.8125rem;
+      }
+      .highlight-list li:last-child {
+        border-bottom: none;
+      }
+      .highlight-list .hl-name {
+        color: var(--gray-800);
+        font-weight: 500;
+      }
+      .highlight-list .hl-value {
+        color: var(--gray-500);
+      }
+      .section-title {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: var(--gray-900);
+        margin-bottom: 1rem;
+      }
+      .summary-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+      }
+      .summary-card {
+        background: #ffffff;
+        border-radius: var(--radius);
+        border: 1px solid var(--gray-200);
+        box-shadow: var(--shadow);
+        padding: 1.25rem;
+        text-align: center;
+      }
+      .summary-card .sc-value {
+        font-size: 2rem;
+        font-weight: 700;
+      }
+      .summary-card .sc-label {
+        font-size: 0.75rem;
+        color: var(--gray-500);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-top: 0.25rem;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-icon">EF</div>
+        <span class="brand-text">EduFoco IA</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="./dashboard.html" class="nav-link">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="./student.html" class="nav-link">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span>Alunos</span>
+        </a>
+        <a href="./highlights.html" class="nav-link active">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <span>Destaques</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <div class="user-avatar">PR</div>
+          <div class="user-details">
+            <span class="user-name">Professor</span>
+            <span class="user-role">Administrador</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <main class="main-content" id="mainContent">
+      <header class="topbar">
+        <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div class="topbar-left">
+          <h1 class="page-title">Destaques</h1>
+          <span class="page-subtitle">Resumo dos principais indicadores</span>
+        </div>
+      </header>
+
+      <div class="dashboard-content" id="highlightsContent">
+        <!-- Summary -->
+        <div class="summary-cards" id="summaryCards"></div>
+
+        <!-- Charts Row -->
+        <section class="charts-row" style="margin-bottom:1.5rem;">
+          <div class="chart-card">
+            <div class="card-header"><h3>Evolução do Índice de Atenção</h3></div>
+            <div class="chart-container"><canvas id="evolutionChart"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <div class="card-header"><h3>Turnos - Comparativo</h3></div>
+            <div class="chart-container"><canvas id="turnoChart"></canvas></div>
+          </div>
+        </section>
+
+        <!-- Highlight Cards -->
+        <div class="highlights-grid" id="highlightsGrid"></div>
+      </div>
+    </main>
+
+    <script>
+      const DEMO = [
+        { id: 1, nome: "Ana Silva", matricula: "482910-5", sala: "Sala 101", sala_id: 1, turno: "Manhã", turno_id: 1, ocorrencias: 3, tempo_desatencao: 45, indice_atencao: 85 },
+        { id: 2, nome: "Bruno Costa", matricula: "193048-2", sala: "Sala 101", sala_id: 1, turno: "Manhã", turno_id: 1, ocorrencias: 7, tempo_desatencao: 120, indice_atencao: 65 },
+        { id: 3, nome: "Mariana Souza", matricula: "748291-0", sala: "Sala 102", sala_id: 2, turno: "Manhã", turno_id: 1, ocorrencias: 1, tempo_desatencao: 15, indice_atencao: 95 },
+        { id: 4, nome: "Lucas Lima", matricula: "351940-7", sala: "Sala 102", sala_id: 2, turno: "Tarde", turno_id: 2, ocorrencias: 5, tempo_desatencao: 90, indice_atencao: 75 },
+        { id: 5, nome: "Carlos Mendes", matricula: "502837-1", sala: "Sala 101", sala_id: 1, turno: "Tarde", turno_id: 2, ocorrencias: 10, tempo_desatencao: 200, indice_atencao: 50 },
+        { id: 6, nome: "Fernanda Rocha", matricula: "619043-8", sala: "Sala 103", sala_id: 3, turno: "Manhã", turno_id: 1, ocorrencias: 2, tempo_desatencao: 30, indice_atencao: 90 },
+        { id: 7, nome: "Gabriel Santos", matricula: "384729-6", sala: "Sala 103", sala_id: 3, turno: "Tarde", turno_id: 2, ocorrencias: 8, tempo_desatencao: 150, indice_atencao: 60 },
+        { id: 8, nome: "Helena Oliveira", matricula: "726150-3", sala: "Sala 102", sala_id: 2, turno: "Manhã", turno_id: 1, ocorrencias: 0, tempo_desatencao: 0, indice_atencao: 100 },
+        { id: 9, nome: "Igor Almeida", matricula: "158493-2", sala: "Sala 101", sala_id: 1, turno: "Manhã", turno_id: 1, ocorrencias: 4, tempo_desatencao: 60, indice_atencao: 80 },
+        { id: 10, nome: "Julia Ferreira", matricula: "903267-5", sala: "Sala 103", sala_id: 3, turno: "Tarde", turno_id: 2, ocorrencias: 6, tempo_desatencao: 110, indice_atencao: 70 },
+        { id: 11, nome: "Kevin Ribeiro", matricula: "417382-9", sala: "Sala 102", sala_id: 2, turno: "Tarde", turno_id: 2, ocorrencias: 12, tempo_desatencao: 240, indice_atencao: 40 },
+        { id: 12, nome: "Larissa Pereira", matricula: "830514-7", sala: "Sala 101", sala_id: 1, turno: "Tarde", turno_id: 2, ocorrencias: 1, tempo_desatencao: 10, indice_atencao: 95 },
+      ];
+
+      let alunos = [];
+
+      async function init() {
+        try {
+          const res = await fetch("/api/alunos");
+          if (res.ok) { alunos = await res.json(); } else { alunos = DEMO; }
+        } catch { alunos = DEMO; }
+        render();
+      }
+
+      function fmtTempo(s) { if (s < 60) return s + "s"; const m = Math.floor(s/60); return m < 60 ? `${m}m ${s%60}s` : `${Math.floor(m/60)}h ${m%60}m`; }
+      function badgeClass(i) { return i >= 80 ? "badge-green" : i >= 50 ? "badge-amber" : "badge-red"; }
+
+      function render() {
+        // Summary
+        const total = alunos.length;
+        const avg = total ? Math.round(alunos.reduce((s,a) => s + a.indice_atencao, 0) / total) : 0;
+        const totalOcorr = alunos.reduce((s,a) => s + a.ocorrencias, 0);
+        const totalTempo = alunos.reduce((s,a) => s + a.tempo_desatencao, 0);
+        const alta = alunos.filter(a => a.indice_atencao >= 80).length;
+        const baixa = alunos.filter(a => a.indice_atencao < 50).length;
+
+        document.getElementById("summaryCards").innerHTML = `
+          <div class="summary-card"><div class="sc-value" style="color:var(--primary)">${total}</div><div class="sc-label">Total de Alunos</div></div>
+          <div class="summary-card"><div class="sc-value" style="color:${avg>=80?'var(--green)':avg>=50?'var(--amber)':'var(--red)'}">${avg}%</div><div class="sc-label">Índice Médio</div></div>
+          <div class="summary-card"><div class="sc-value" style="color:var(--green)">${alta}</div><div class="sc-label">Alta Atenção (≥80%)</div></div>
+          <div class="summary-card"><div class="sc-value" style="color:var(--red)">${baixa}</div><div class="sc-label">Baixa Atenção (<50%)</div></div>
+          <div class="summary-card"><div class="sc-value" style="color:var(--amber)">${totalOcorr}</div><div class="sc-label">Total Ocorrências</div></div>
+        `;
+
+        // Evolution chart
+        renderEvolutionChart();
+        renderTurnoChart();
+
+        // Highlight cards
+        const grid = document.getElementById("highlightsGrid");
+        const topStudents = [...alunos].sort((a,b) => b.indice_atencao - a.indice_atencao).slice(0, 5);
+        const worstStudents = [...alunos].sort((a,b) => a.indice_atencao - b.indice_atencao).slice(0, 5);
+        const mostOcorr = [...alunos].sort((a,b) => b.ocorrencias - a.ocorrencias).slice(0, 5);
+        const mostTime = [...alunos].sort((a,b) => b.tempo_desatencao - a.tempo_desatencao).slice(0, 5);
+
+        grid.innerHTML = `
+          <div class="highlight-card">
+            <div class="highlight-card-header">
+              <div class="highlight-icon" style="background:var(--green-light);color:var(--green);">🏆</div>
+              <div><div class="highlight-title">Melhores Índices</div><div class="highlight-subtitle">Maior índice de atenção</div></div>
+            </div>
+            <div class="highlight-card-body">
+              <ul class="highlight-list">
+                ${topStudents.map(a => `<li><span class="hl-name">${a.nome}</span><span class="badge ${badgeClass(a.indice_atencao)}">${a.indice_atencao}%</span></li>`).join("")}
+              </ul>
+            </div>
+          </div>
+          <div class="highlight-card">
+            <div class="highlight-card-header">
+              <div class="highlight-icon" style="background:var(--red-light);color:var(--red);">⚠️</div>
+              <div><div class="highlight-title">Mais Ocorrências</div><div class="highlight-subtitle">Maior número de episódios</div></div>
+            </div>
+            <div class="highlight-card-body">
+              <ul class="highlight-list">
+                ${mostOcorr.map(a => `<li><span class="hl-name">${a.nome}</span><span class="hl-value">${a.ocorrencias} ocorrências</span></li>`).join("")}
+              </ul>
+            </div>
+          </div>
+          <div class="highlight-card">
+            <div class="highlight-card-header">
+              <div class="highlight-icon" style="background:var(--amber-light);color:var(--amber);">⏱️</div>
+              <div><div class="highlight-title">Maior Tempo de Desatenção</div><div class="highlight-subtitle">Mais tempo fora de atenção</div></div>
+            </div>
+            <div class="highlight-card-body">
+              <ul class="highlight-list">
+                ${mostTime.map(a => `<li><span class="hl-name">${a.nome}</span><span class="hl-value">${fmtTempo(a.tempo_desatencao)}</span></li>`).join("")}
+              </ul>
+            </div>
+          </div>
+          <div class="highlight-card">
+            <div class="highlight-card-header">
+              <div class="highlight-icon" style="background:var(--primary-light);color:var(--primary);">📉</div>
+              <div><div class="highlight-title">Menores Índices</div><div class="highlight-subtitle">Precisam de atenção</div></div>
+            </div>
+            <div class="highlight-card-body">
+              <ul class="highlight-list">
+                ${worstStudents.map(a => `<li><span class="hl-name">${a.nome}</span><span class="badge ${badgeClass(a.indice_atencao)}">${a.indice_atencao}%</span></li>`).join("")}
+              </ul>
+            </div>
+          </div>
+        `;
+      }
+
+      function renderEvolutionChart() {
+        const ctx = document.getElementById("evolutionChart");
+        if (!ctx) return;
+        const labels = ["Sem 1", "Sem 2", "Sem 3", "Sem 4"];
+        const data = labels.map(() => 60 + Math.floor(Math.random() * 25));
+        new Chart(ctx, {
+          type: "line",
+          data: {
+            labels,
+            datasets: [{
+              label: "Índice Médio (%)",
+              data,
+              borderColor: "#2563eb",
+              backgroundColor: "#2563eb33",
+              fill: true,
+              tension: 0.4,
+              pointBackgroundColor: "#2563eb",
+              pointRadius: 5,
+              pointHoverRadius: 7,
+            }]
+          },
+          options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true, max: 100, grid: { color: "#f3f4f6" }, ticks: { callback: v => v + "%" } }, x: { grid: { display: false } } }
+          }
+        });
+      }
+
+      function renderTurnoChart() {
+        const ctx = document.getElementById("turnoChart");
+        if (!ctx) return;
+        const turnos = {};
+        alunos.forEach(a => {
+          const t = a.turno || "Não definido";
+          if (!turnos[t]) turnos[t] = { total: 0, soma: 0 };
+          turnos[t].total++;
+          turnos[t].soma += a.indice_atencao;
+        });
+        const labels = Object.keys(turnos);
+        const data = labels.map(l => Math.round(turnos[l].soma / turnos[l].total));
+
+        new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels,
+            datasets: [{
+              label: "Índice Médio (%)",
+              data,
+              backgroundColor: ["#2563eb44", "#7c3aed44", "#05966944"],
+              borderColor: ["#2563eb", "#7c3aed", "#059669"],
+              borderWidth: 2,
+              borderRadius: 6,
+              borderSkipped: false,
+            }]
+          },
+          options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true, max: 100, grid: { color: "#f3f4f6" }, ticks: { callback: v => v + "%" } }, x: { grid: { display: false } } }
+          }
+        });
+      }
+
+      // Sidebar
+      const menuToggle = document.getElementById("menuToggle");
+      const sidebar = document.getElementById("sidebar");
+      const overlay = document.getElementById("sidebarOverlay");
+      menuToggle.addEventListener("click", () => { sidebar.classList.toggle("active"); overlay.classList.toggle("active"); });
+      overlay.addEventListener("click", () => { sidebar.classList.remove("active"); overlay.classList.remove("active"); });
+
+      init();
+    </script>
+  </body>
+</html>

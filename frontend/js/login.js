@@ -13,7 +13,7 @@ document
     if (email === correctEmail && password === correctPassword) {
       errorMessage.style.display = "none";
 
-      window.location.href = "/frontend/dashboard.html";
+      window.location.href = "./dashboard.html";
     } else {
       errorMessage.textContent = "E-mail ou senha incorretos.";
       errorMessage.style.display = "block";
